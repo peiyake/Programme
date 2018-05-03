@@ -10,9 +10,10 @@
  */
 
 #define MAX_IFNUM	32
-
+#define _PATH_PROCNET_DEV "/proc/net/dev"
 void            init_ifInfoTable(void);
 void            initialize_table_ifInfoTable(void);
+Netsnmp_Node_Handler ifInfoScalar_handler;
 Netsnmp_Node_Handler ifInfoTable_handler;
 Netsnmp_First_Data_Point ifInfoTable_get_first_data_point;
 Netsnmp_Next_Data_Point ifInfoTable_get_next_data_point;

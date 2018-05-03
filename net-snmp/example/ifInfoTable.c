@@ -24,6 +24,12 @@ enum{
 
 struct ifInfoTable_entry *ifInfoTable_head = NULL;
 
+const oid oid_ininfo_num[] = {IFINFO_NUM_OID};
+
+mib_node_info_t ifinfo_num[] ={
+{"ifNum",	oid_ininfo_num,		OID_LENGTH(oid_ininfo_num),		HANDLER_CAN_RONLY}
+};
+
 struct ifInfoTable_entry *ifInfoTable_createEntry(struct ifInfoTable_entry*pdata)
 {
     struct ifInfoTable_entry *entry;
@@ -41,7 +47,7 @@ struct ifInfoTable_entry *ifInfoTable_createEntry(struct ifInfoTable_entry*pdata
    	strncpy(entry->ifName,pdata->ifName,strlen(pdata->ifName));
    	entry->ifName_len = pdata->ifName_len;
 
-   	syslog(LOG_INFO,"Data instert:ifid[%d],ifname[%s]\n",entry->ifID,entry->ifName);
+   	syslog(LOG_INFO,"IfterFace[%d]:%s\n",entry->ifID,entry->ifName);
     entry->next = ifInfoTable_head;
     ifInfoTable_head = entry;
     return entry;
@@ -53,7 +59,7 @@ long ifInfoTable_getIdByname(char *ifName)
     for (ptr = ifInfoTable_head, prev = NULL;
          ptr != NULL; prev = ptr, ptr = ptr->next) 
     {
-    	if(!strncmp(ptr->ifName,ifName,strlen(ifName)))
+    	if(!strncmp(ifName,ptr->ifName,strlen(ptr->ifName)))
     	return ptr->ifID;
     }
     return -1;
@@ -99,6 +105,93 @@ void set_ip(struct ifInfoTable_entry *pdata)
 
 	sprintf(cmd,"ifconfig %s %s",pdata->ifName,(char *)inet_ntoa(addr));
 	system(cmd);
+}
+static char *get_name(char *name, char *p)
+{
+    while (isspace(*p))
+	p++;
+    while (*p) {
+	if (isspace(*p))
+	    break;
+	if (*p == ':') {	/* could be an alias */
+	    char *dot = p, *dotname = name;
+	    *name++ = *p++;
+	    while (isdigit(*p))
+		*name++ = *p++;
+	    if (*p != ':') {	/* it wasn't, backup */
+		p = dot;
+		name = dotname;
+	    }
+	    if (*p == '\0')
+		return NULL;
+	    p++;
+	    break;
+	}
+	*name++ = *p++;
+    }
+    *name++ = '\0';
+    return p;
+}
+int get_if_info2(void)
+{
+	FILE *fh;
+	int fd;
+	int index = 1;
+	char buf[512];
+	struct ifreq ifr;
+	struct ifInfoTable_entry data;
+	
+    if ((fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
+    {
+    	syslog(LOG_ERR,"syscket error:%s\n",strerror(errno));
+        close(fd);
+        return -1;
+    }
+
+	memset(&data,0,sizeof(data));
+	fh = fopen(_PATH_PROCNET_DEV, "r");
+	if (!fh) {
+		syslog(LOG_ERR,"Warning: cannot open %s (%s). Limited output.\n",
+			_PATH_PROCNET_DEV, strerror(errno)); 
+		return -1 ;
+	}	
+	fgets(buf, sizeof buf, fh); /* eat line */
+	fgets(buf, sizeof buf, fh);
+
+	memset(buf,0,sizeof(buf));
+	while (fgets(buf, sizeof(buf), fh)) 
+	{
+		char name[IFNAMSIZ];
+		get_name(name, buf);
+		memset(buf,0,sizeof(buf));
+
+		data.ifID = index;
+		strcpy(data.ifName,name);
+		data.ifName_len = strlen(name);
+		
+		/*fetch interface mac*/		
+		strcpy(ifr.ifr_name, name);
+		if(ioctl(fd, SIOCGIFHWADDR, &ifr) < 0)
+			memset(data.ifMAC, 0, 32);
+		else
+			memcpy(data.ifMAC, ifr.ifr_hwaddr.sa_data, 6);
+		data.ifMAC_len = 6;
+		
+		/*fetch interface ip*/		
+		strcpy(ifr.ifr_name, name);
+		if (ioctl(fd, SIOCGIFADDR,&ifr) < 0)
+			data.ifIP = 0;
+		else
+			data.ifIP = (in_addr_t)((struct sockaddr_in *)&(ifr.ifr_addr))->sin_addr.s_addr;
+
+			
+		ifInfoTable_createEntry(&data);
+		index++;
+		memset(&data,0,sizeof(data));
+	}
+	close(fd);
+	fclose(fh);
+	return 1;
 }
 int get_if_info(void)
 {
@@ -179,15 +272,16 @@ int get_if_info(void)
 }
 void init_ifInfoTable_data(void)
 {
-	get_if_info();	
+	get_if_info2();	
 }
-/** Initializes the ifInfoTable module */
-void init_ifInfoTable(void)
+void initialize_table_ifInfoNum(void)
 {
-	init_ifInfoTable_data();
-    initialize_table_ifInfoTable();
-}
+	mib_node_info_t *pmib = ifinfo_num;
+    netsnmp_register_scalar(netsnmp_create_handler_registration
+                            (pmib->nodename, ifInfoScalar_handler, pmib->nodeoid,
+                             pmib->oid_len, pmib->permission));
 
+}
 void initialize_table_ifInfoTable(void)
 {
     const oid       ifInfoTable_oid[] ={IFINFO_TABLE_OID};
@@ -248,6 +342,26 @@ netsnmp_variable_list *ifInfoTable_get_next_data_point(void **my_loop_context,
     } else {
         return NULL;
     }
+}
+int ifInfoScalar_handler(netsnmp_mib_handler *handler,
+				netsnmp_handler_registration *reginfo,
+				netsnmp_agent_request_info *reqinfo,
+				netsnmp_request_info *requests)
+{
+	long num;
+	switch (reqinfo->mode) {
+	case MODE_GET:
+		num = ifInfoTable_getNum();
+		snmp_set_var_typed_value(requests->requestvb, ASN_INTEGER,
+								(const void*)&num,
+								sizeof(num));
+		break;
+	default:
+		syslog(LOG_ERR, "unknown mode (%d) in handle_hostname\n",
+				 reqinfo->mode);
+		return SNMP_ERR_GENERR;
+	}
+	return SNMP_ERR_NOERROR;
 }
 
 
@@ -390,4 +504,11 @@ int ifInfoTable_handler(netsnmp_mib_handler *handler,
         break;
     }
     return SNMP_ERR_NOERROR;
+}
+/** Initializes the ifInfoTable module */
+void init_ifInfoTable(void)
+{
+	initialize_table_ifInfoNum();
+	init_ifInfoTable_data();
+	initialize_table_ifInfoTable();
 }

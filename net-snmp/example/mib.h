@@ -7,8 +7,19 @@
 #define EXAMPLE_OID			ROOT_OID,1
 #define PCINFO_OID			EXAMPLE_OID,1
 
-/*scalar*/
-#define DEVINFO_OID			PCINFO_OID,1	
+
+#define TRAP_ROOT_OID		PCINFO_OID,1
+#define DEVINFO_OID			PCINFO_OID,2
+#define IFINFO_OID			PCINFO_OID,3
+#define BRIDGE_OID			PCINFO_OID,4
+
+/*trap info oid */
+#define TRAP_REPORT_NODE			TRAP_ROOT_OID,1
+#define TRAP_INFO_TYPE_OID			TRAP_ROOT_OID,2,1
+#define TRAP_INFO_LEVEL_OID			TRAP_ROOT_OID,2,2
+#define TRAP_INFO_TIME_OID			TRAP_ROOT_OID,2,3
+#define TRAP_INFO_REASON_OID		TRAP_ROOT_OID,2,4
+	
 /*devinfo scalar node*/
 #define DEVINFO_SCALAR_HOSTNAME			DEVINFO_OID,1
 #define DEVINFO_SCALAR_SYSTEMTYPE		DEVINFO_OID,2
@@ -18,10 +29,14 @@
 #define DEVINFO_SCALAR_CPU				DEVINFO_OID,6
 #define DEVINFO_SCALAR_MEM				DEVINFO_OID,7
 
-/*table*/
-#define IFINFO_OID			PCINFO_OID,2
-#define IFINFO_TABLE_OID	IFINFO_OID,1
-#define BRIDGE_TABLE_OID	IFINFO_OID,2
+/*table of ifinfo*/
+#define IFINFO_NUM_OID		IFINFO_OID,1
+#define IFINFO_TABLE_OID	IFINFO_OID,2
+
+/*table of bridge */
+#define BRIDGE_TABLE_OID	BRIDGE_OID,1
+
+
 
 #if 0
 /*ifinfo table column*/
