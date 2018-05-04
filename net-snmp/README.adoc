@@ -87,3 +87,10 @@ link:https://github.com/peiyake/Programme/tree/master/net-snmp/example[这是我
 * 然后拷贝mib文件，*PIAK-SNMP-EXAMPLE.my*,使用mibCompile编译，安装到MG-SOFT软件安装目录
 * 在win10上运行mibBroswer软件，找到这个mib，就可以采集节点信息了
 * snmpdemo程序每5秒钟发送一个trap到demomib.conf中指定的ip地址。
+
+== 写在最后
+
+首先感谢阅读本文章，希望文中介绍的东西能对你有所帮助。
+
+上述内容均为本人原创，项目案例也是自行编写调试的。如果有问题可以跟我联系<1029582431@qq.com>,如果你加入了
+qq群_203127943_,那么可以在里面直接 *@Mr.Piak*来找我，我看到后一定会回复。谢谢！
