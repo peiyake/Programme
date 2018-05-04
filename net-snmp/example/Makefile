@@ -8,6 +8,7 @@ SOURCES=$(wildcard $(TOPDIR)/*.c)
 LDLIBS:=$(shell net-snmp-config --netsnmp-libs)
 LDLIBS+=$(shell net-snmp-config --netsnmp-agent-libs)
 
+CFLAGS:=-g
 objs:=$(patsubst %.c,%.o,$(notdir $(SOURCES)))
 
 .PHONY:all clean install uninstall
@@ -15,7 +16,7 @@ objs:=$(patsubst %.c,%.o,$(notdir $(SOURCES)))
 all:$(target)
 
 $(target):$(objs)
-	$(CC) -o $@ $(objs) $(LDLIBS) 
+	$(CC) -o $@ $(objs) $(LDLIBS) $(CFLAGS)
 
 clean:
 	rm -f $(objs) $(target)
