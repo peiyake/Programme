@@ -1,4 +1,6 @@
 = NET-SNMP开发
+Doc Writer <1029582431@qq.com>
+:toc:
 
 == mib文件编写
 mib文件是是一个管理信息的集合，它是开发人员按照约定的组织规则、定义语法编写的结构化的文本文件。
@@ -8,7 +10,7 @@ mib文件是是一个管理信息的集合，它是开发人员按照约定的�
 
 === MG-SOFT 系列软件使用
 
-. 软件安装，link:链接:https://pan.baidu.com/s/1n_-rQKDS-_crzxNLQoSrag[软件下载地址]  密码:65gz
+. 软件安装，link:https://pan.baidu.com/s/1n_-rQKDS-_crzxNLQoSrag[软件下载地址]  密码:65gz
 . mibBuilder创建mib文件
 * 打开mibBuilder，点击*File->New->SMIv2 MIB MODULE*
 * 修改右侧Module Name，为你的mib模块取个名字，注意名字需要大写字母开头
