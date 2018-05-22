@@ -1,0 +1,15 @@
+---
+Device:
+   - CGW4700
+   - CGW9000
+   - BC3000
+   - CGW3000
+   - BC2000
+Cpu: intel
+Mem: 80M
+IfNum: 4
+Interface:
+    ensp1: eth0
+    ensp2: eth1
+    ensp3: eth2
+    ensp4: eth3

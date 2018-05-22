@@ -1,0 +1,61 @@
+=== yaml语法记录
+
+==== 基本概念
+* 文件必须以`---`开头
+* 同一级别元素，只需要左对齐即可，禁止使用TAB键，应该使用空格键
+* 配置文件包含三种元素
+** 对象-又称为（映射、哈希、字典）
+** 数组
+** 纯量
+
+==== 对象
+对象一般以键值对的形式存在 `key: value`
+
+.例子
+[source,yaml]
+----
+---
+  name: piak
+  mail: 1029582431@qq.com
+  eage: 18
+----
+
+.对象嵌套的例子
+[source,yaml]
+----
+---
+Device:
+   name: BC3000
+   infnum: 4
+   Interface:
+     enps0: eth0
+     enps1: eth1
+     enps2: eth2
+     enps3: eth3
+----
+
+==== 数组
+数组：一系列数据的集合。
+
+在yaml中，数组成员用`-`开头表示，`-`后面要有个空格
+
+.数组例子
+[source,yaml]
+----
+---
+- num1
+- num2
+- num3
+- num4
+----
+
+.哈希数组：key=fruits, values=数组
+[source,yaml]
+----
+---
+  fruits:
+    - apple
+    - banana
+    - orange
+    - peach
+----
