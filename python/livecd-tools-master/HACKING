@@ -1,0 +1,23 @@
+
+SOURCE CONTROL MANAGEMENT
+=========================
+
+This project is stored in git and can be checked out using
+
+ git clone https://github.com/rhinstaller/livecd-tools
+
+Change history etc. can be obtained from the web interface at the same URL.
+
+PATCHES
+=======
+
+Send patches to the livecd@lists.fedoraproject.org mailing list or submit a
+pull request at github.
+
+ https://lists.fedoraproject.org/admin/lists/livecd.lists.fedoraproject.org/
+
+If you have a number of patches and want to have them pulled from a
+public git repository, please post a pointer to it as well as sending
+each of the patches individually to the list.  Note that the
+combination of git-format-patch and git-send-email works well for
+sending a series of patches which you have in a local repository.
