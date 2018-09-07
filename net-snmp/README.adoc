@@ -14,30 +14,30 @@ mib文件是是一个管理信息的集合，它是开发人员按照约定的�
 
 . 软件安装，link:https://pan.baidu.com/s/1n_-rQKDS-_crzxNLQoSrag[软件下载地址]  密码:65gz
 . mibBuilder创建mib文件
-* 打开mibBuilder，点击*File->New->SMIv2 MIB MODULE*
+* 打开mibBuilder，点击 *File->New->SMIv2 MIB MODULE*
 * 修改右侧Module Name，为你的mib模块取个名字，注意名字需要大写字母开头
-* 点击* File->Import *导入标准mib文件* SNMPv2-SMI *,导入后会自动打开，找到* enterprises *节点，
+* 点击 *File->Import* 导入标准mib文件 *SNMPv2-SMI* ,导入后会自动打开，找到 *enterprises* 节点，
 右键复制，然后把当前窗口最小化，然后可以看到我们刚刚新建的模块
-* 点击* MIB tree *，右键选择* 粘贴 *，此时我们自定义的mib模块就挂在了标准mib的树下
-* 此时，在软件界面右侧，拖动* MODULE-IDENTITY *这个图标，放在我们自定义mib文件的* enterprises *节点下面，
+* 点击 *MIB tree* ，右键选择 *粘贴* ，此时我们自定义的mib模块就挂在了标准mib的树下
+* 此时，在软件界面右侧，拖动 *MODULE-IDENTITY* 这个图标，放在我们自定义mib文件的 *enterprises* 节点下面，
 这是确保我们定义的mib文件，生成一个模块。
-* 接下来就是构建我们自己的mib树了，可以仿照已有的标准mib文件进行创建，例如：按照刚才的步骤，* File->Import *
-导入标准mib文件* RFC1213-MIB *，仔细看看标准mib文件中* mib-2 *节点下的标量和表格是如何构建的，然后仿照它的形式
+* 接下来就是构建我们自己的mib树了，可以仿照已有的标准mib文件进行创建，例如：按照刚才的步骤，*File->Import* 
+导入标准mib文件 *RFC1213-MIB* ，仔细看看标准mib文件中 *mib-2* 节点下的标量和表格是如何构建的，然后仿照它的形式
 只需要在右侧找到相应的图标，拖到我们的mib树下面即可。
 * Textual Conventions自定义数据类型：在我们自定义的mib树种有个这个模块，是用来自定义数据类型的。 这个功能，
-同样可以公共导入标准mib文件，来参考标准的是怎么做的_自定义的数据类型_，* File->Import *导入* IF-MIB *，在这个
+同样可以公共导入标准mib文件，来参考标准的是怎么做的_自定义的数据类型_， *File->Import* 导入 *IF-MIB* ，在这个
 mib文件中有很多自定义的数据类型，看看需要哪种，复制粘贴到自己的mib模块就可以了。
 * mib文件编写中主要注意的几点是：对于表格，需要在表中指定index索引节点。通常情况都使用整数作为索引。 还有对于
 trap节点，在trap叶子中要指定绑定的数据节点（你可以先创建好几个标量）专门用于trap数据绑定使用（一般trap告警需要
 包括告警level、type、time、reason这些内容）
-* mib文件编写好之后记得语法检查，修改错误。然后* File->Export *导出为 .my 文件。正常导出后，一般软件会自动
-打开 * MIb Compiler *这个软件，用于编译mib文件
+* mib文件编写好之后记得语法检查，修改错误。然后 *File->Export* 导出为 .my 文件。正常导出后，一般软件会自动
+打开 *MIb Compiler* 这个软件，用于编译mib文件
 
-. mib Compiler软件打开.my文件后，点击* Tools->Compiler xxx *，编译你的mib文件，正常的话再最后，弹出的对话框中
-选在* save all *到默认路径，一般是mibBroswer软件安装目录中_MIB/SMIDB_这个目录，安装到这里。随后你使用mibBroswer
+. mib Compiler软件打开.my文件后，点击 *Tools->Compiler xxx* ，编译你的mib文件，正常的话再最后，弹出的对话框中
+选在 *save all* 到默认路径，一般是mibBroswer软件安装目录中 _MIB/SMIDB_ 这个目录，安装到这里。随后你使用mibBroswer
 软件时，才能找到你的mib文件。
-. mibBroswer软件打开后，在软件界面找到* MIB *标签，切换到该标签下，然后点击刷新按钮* ⭕️中带个！*的那个，然后在下面
-找到你刚刚编译的模块，选择后点击* ⤴️ *导入。然后在切换到* Qurey *标签，此时你就可以找到你自定义的模块了。
+. mibBroswer软件打开后，在软件界面找到 *MIB* 标签，切换到该标签下，然后点击刷新按钮 *⭕️中带个* 的那个，然后在下面
+找到你刚刚编译的模块，选择后点击 *⤴️* 导入。然后在切换到 *Qurey* 标签，此时你就可以找到你自定义的模块了。
 
 接下来的工作就是，按照你的mib文件，实现这些节点。把实现的程序运行起来，然后通过mibBroswer来访问你的数据了。
 
@@ -49,13 +49,13 @@ trap节点，在trap叶子中要指定绑定的数据节点（你可以先创建
 * 软件包安装
 ** ubuntu环境：sudo apt-get install net-snmp
 ** centos环境：yum install net-snmp
-. 环境搭建好后，拷贝你的.my格式的mib文件到linux环境设备上。你可以直接使用我的mib文件* PIAK-SNMP-EXAMPLE.my *。
+. 环境搭建好后，拷贝你的.my格式的mib文件到linux环境设备上。你可以直接使用我的mib文件 *PIAK-SNMP-EXAMPLE.my* 。
 . 下面开始介绍mib2c依据mib文件自动生成代码的方法
-* 执行命令:`net-snmp-config --prefix` 查看一下你的net-snmp软件的安装目录,我的是*/usr/local*
-* 拷贝mib文件到安装目录下指定目录:`cp -f PIAK-SNMP-EXAMPLE.my /usr/local/share/snmp/mibs/` 注意：把/usr/local
+* 执行命令: `net-snmp-config --prefix` 查看一下你的net-snmp软件的安装目录,我的是 */usr/local* 
+* 拷贝mib文件到安装目录下指定目录: `cp -f PIAK-SNMP-EXAMPLE.my /usr/local/share/snmp/mibs/` 注意：把/usr/local
 替换成你自己的软件安装目录
-* 找个合适文件，随便新建一个文件夹（为了存放我们的自动生成的代码文件），例如:`mkdir ~/snmp`
-* `cd ~/snmp` mib2c命令生成代码
+* 找个合适文件，随便新建一个文件夹（为了存放我们的自动生成的代码文件），例如: `mkdir ~/snmp`
+*  `cd ~/snmp` mib2c命令生成代码
 ** 标量代码
 *** `env MIBS="PIAK-SNMP-EXAMPLE" mib2c -c mib2c.scalar.conf PIAK-SNMP-EXAMPLE::devinfo`
 ** 表格代码框架iterate
@@ -66,7 +66,7 @@ trap节点，在trap叶子中要指定绑定的数据节点（你可以先创建
 *** `env MIBS="PIAK-SNMP-EXAMPLE" mib2c -c mib2c.old-api.conf PIAK-SNMP-EXAMPLE::bridgeTable`
 ** main函数 （采用子代理工作在主模式下的方式）
 *** 代码可以从这里获取，然后自行修改一下link:http://www.net-snmp.org/tutorial/tutorial-5/toolkit/demon/example-demon.c[官网示例代码]
-*** main函数修改：代码中`agentx_subagent=0`， 表示让程序工作在master模式（自己监听161端口,而不是通过和snmpd通信来完成161端口监听）
+*** main函数修改：代码中 `agentx_subagent=0` ， 表示让程序工作在master模式（自己监听161端口,而不是通过和snmpd通信来完成161端口监听）
 * 代码生成后，需要自行进行修改。 你可以参考我的example目录下的代码
 
 == 主代理和子代理
@@ -86,8 +86,8 @@ link:https://github.com/peiyake/Programme/tree/master/net-snmp/example[这是我
 * `cp demomib.conf ~/.snmp/`  这是配置文件
 * 另外配置文件路径可以通过设置环境变量 SNMPCONFPATH 来指定
 * `make`
-* 编译后生成可执行程序snmpdemo，运行:`./snmpdemo`
-* 然后拷贝mib文件，*PIAK-SNMP-EXAMPLE.my*,使用mibCompile编译，安装到MG-SOFT软件安装目录
+* 编译后生成可执行程序snmpdemo，运行: `./snmpdemo`
+* 然后拷贝mib文件， *PIAK-SNMP-EXAMPLE.my* ,使用mibCompile编译，安装到MG-SOFT软件安装目录
 * 在win10上运行mibBroswer软件，找到这个mib，就可以采集节点信息了
 * snmpdemo程序每5秒钟发送一个trap到demomib.conf中指定的ip地址。
 
@@ -96,4 +96,4 @@ link:https://github.com/peiyake/Programme/tree/master/net-snmp/example[这是我
 首先感谢阅读本文章，希望文中介绍的东西能对你有所帮助。
 
 上述内容均为本人原创，项目案例也是自行编写调试的。如果有问题可以跟我联系<1029582431@qq.com>,如果你加入了
-qq群_203127943_,那么可以在里面直接 *@Mr.Piak*来找我，我看到后一定会回复。谢谢！
+qq群 _203127943_ ,那么可以在里面直接 *@Mr.Piak* 来找我，我看到后一定会回复。谢谢！
